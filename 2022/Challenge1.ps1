@@ -107,11 +107,6 @@ function Parse-SecPol {
 function Get-PassowrdPolicyHistory {
     [CmdletBinding()]
     param (
-        # Correct value
-        [Parameter()]
-        [Switch]
-        $Value,
-
         # Clear cache
         [Parameter()]
         [Switch]
@@ -126,11 +121,6 @@ function Get-PassowrdPolicyHistory {
 function Get-PasswordPolicyMaximumAge {
     [CmdletBinding()]
     param (
-        # Correct value
-        [Parameter()]
-        [Switch]
-        $Value,
-
         # Clear cache
         [Parameter()]
         [Switch]
@@ -145,11 +135,6 @@ function Get-PasswordPolicyMaximumAge {
 function Get-PasswordPolicyMinimumAge {
     [CmdletBinding()]
     param (
-        # Correct value
-        [Parameter()]
-        [Switch]
-        $Value,
-
         # Clear cache
         [Parameter()]
         [Switch]
@@ -164,11 +149,6 @@ function Get-PasswordPolicyMinimumAge {
 function Get-PasswordPolicyPasswordLength {
     [CmdletBinding()]
     param (
-        # Correct value
-        [Parameter()]
-        [Switch]
-        $Value,
-
         # Clear cache
         [Parameter()]
         [Switch]
@@ -183,11 +163,6 @@ function Get-PasswordPolicyPasswordLength {
 function Get-PasswordPolicyComplexityEnabled {
     [CmdletBinding()]
     param (
-        # Correct value
-        [Parameter()]
-        [Switch]
-        $Value,
-
         # Clear cache
         [Parameter()]
         [Switch]
@@ -202,11 +177,6 @@ function Get-PasswordPolicyComplexityEnabled {
 function Get-PasswordPolicyClearTextPassword {
     [CmdletBinding()]
     param (
-        # Correct value
-        [Parameter()]
-        [Switch]
-        $Value,
-
         # Clear cache
         [Parameter()]
         [Switch]
@@ -218,6 +188,19 @@ function Get-PasswordPolicyClearTextPassword {
     $Secpol.'System Access'.ClearTextPassword
 }
 
+function Get-FirewallPublicRulesEnabled {
+    [CmdletBinding()]
+    param ()
+
+    (Get-NetFirewallProfile | Where-Object {$_.Name -eq 'Public'}).Enabled
+}
+
+function Get-FirewallPrivateRulesEnabled {
+    [CmdletBinding()]
+    param ()
+    
+    (Get-NetFirewallProfile | Where-Object {$_.Name -eq 'Private'}).Enabled
+}
 
 function Check-Equal {
     [CmdletBinding()]
@@ -231,9 +214,24 @@ function Check-Equal {
         [Object]
         $Second
     )
-    Write-Host $First
-    Write-Host $Second
+    
     $First -eq $Second
+}
+
+function Check-NotEqual {
+    [CmdletBinding()]
+    param (
+        # First
+        [Parameter(Mandatory=$true, Position=0)]
+        [Object]
+        $First,
+        # Second
+        [Parameter(Mandatory=$true, Position=1)]
+        [Object]
+        $Second
+    )
+
+    $First -ne $Second
 }
 
 function Check-GreaterThanEquals {
@@ -248,8 +246,7 @@ function Check-GreaterThanEquals {
         [Object]
         $Second
     )
-    Write-Host $First
-    Write-Host $Second
+
     $First -ge $Second
 }
 
@@ -257,7 +254,9 @@ $Challenge = Import-Csv -Path .\Challenge1.csv
 $Results = $Challenge | ForEach-Object {
     if ($_.Function) {
         $Result = $_
-        $Result.ReturnValue = &$_.Function
+        # $Result.ReturnValue = &$_.Function
+        $ScriptBlock = [ScriptBlock]::Create($_.Function)
+        $Result.ReturnValue = &$ScriptBlock
         if (&$_.Check $Result.ReturnValue $_.DesiredValue) {
             $Result.Score = $_.Points
         }
@@ -268,4 +267,9 @@ $Results = $Challenge | ForEach-Object {
     }
 }
 
-$Results
+$Results | Select-Object -Property Challenge, Score, DesiredValue, ReturnValue | Format-Table
+
+$Score = $Results | Measure-Object Score -Sum
+$Total = $Results | Measure-Object Points -Sum
+
+Write-Host ('Score {0} out of {1}' -f $Score.Sum, $Total.Sum)
