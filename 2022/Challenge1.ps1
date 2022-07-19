@@ -218,6 +218,35 @@ function Check-Equal {
     $First -eq $Second
 }
 
+function Find-File {
+    [CmdletBinding()]
+    param (
+        # Filter
+        [Parameter(Mandatory=$true)]
+        [String]
+        $Filter,
+
+        # Path
+        [Parameter()]
+        [String[]]
+        $Path = 'C:\'
+    )
+
+    $Result = Get-ChildItem -Filter $Filter -Path C:\Users\judd\Hidden\ -Recurse -ErrorAction SilentlyContinue -Force
+
+    $List = @()
+    $Result | ForEach-Object {
+        $List += $_.FullName
+    }
+    return ,$List
+
+    # if ($null -eq $Result) {
+    #     return ,@()
+    # } else {
+    #     @($Result.FullName)
+    # }
+}
+
 function Check-NotEqual {
     [CmdletBinding()]
     param (
@@ -250,13 +279,32 @@ function Check-GreaterThanEquals {
     $First -ge $Second
 }
 
+function Check-Empty {
+    [CmdletBinding()]
+    param (
+        # First
+        [Parameter(Position=0)]
+        [Object]
+        $First = $(),
+        # Second
+        [Parameter(Position=1)]
+        [String]
+        $Second=''
+    )
+    Write-Host $First
+    Write-Host $First.Length
+    $First.Length -eq 0
+}
+
 $Challenge = Import-Csv -Path .\Challenge1.csv
 $Results = $Challenge | ForEach-Object {
     if ($_.Function) {
         $Result = $_
         # $Result.ReturnValue = &$_.Function
+        Write-Host ("Function: {0}" -f $_.Function)
         $ScriptBlock = [ScriptBlock]::Create($_.Function)
         $Result.ReturnValue = &$ScriptBlock
+        Write-Host ("Result: {0}" -f $Result.ReturnValue)
         if (&$_.Check $Result.ReturnValue $_.DesiredValue) {
             $Result.Score = $_.Points
         }

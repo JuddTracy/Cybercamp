@@ -15,4 +15,4 @@ Services: Disable Telnet,Running,1,,Fixme,(Get-Service -Name 'WpnService').Statu
 Services: Disable WWW Publishing,Running,1,,Fixme,(Get-Service -Name 'Wsearch').Status,Check-NotEqual,
 Remote Desktop: Disable connections,,1,,,,,
 Windows Defender: Enable windows defender,,1,,,,,
-Filesystem: Remove notavirus.exe,,1,,Do we grade them on enabling hidden folder?,,,
+Filesystem: Remove notavirus.exe,1,1,,Do we grade them on enabling hidden folder?,Find-File -Filter 'notavirus.exe',Check-Empty,
