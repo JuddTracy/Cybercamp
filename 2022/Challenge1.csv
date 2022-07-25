@@ -7,7 +7,7 @@ Password Policy: Password complexity enabled,1,1,,,Get-PasswordPolicyComplexityE
 Password Policy: Disable reversible encryption,0,1,,,Get-PasswordPolicyClearTextPassword,Check-Equal,
 File Sharing: Stop sharing of Cybercamp folder,1,1,,,(Find-Share -Name 'CyberCamp'),Check-Empty,
 Windows Update: Enable windows update,,1,,,,,
-Scheduled Tasks: No scheduled tasks should be running,,1,,,,,
+Scheduled Tasks: No scheduled tasks should be running,,1,,,Find-ScheduledTasks -Author '.*Cybercamp',Check-Empty,
 Firewall: Public rules are enabled,1,1,,,Get-FirewallPublicRulesEnabled,Check-Equal,
 Firewall: Private rules are enabled,1,1,,,Get-FirewallPrivateRulesEnabled,Check-Equal,
 Services: Disable RIP Listener,Running,1,,Fixme,(Get-Service -Name 'VaultSvc').Status,Check-Equal,

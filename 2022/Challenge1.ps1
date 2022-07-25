@@ -259,6 +259,17 @@ function Find-Share {
 
 }
 
+function Find-ScheduledTasks {
+    [CmdletBinding()]
+    param (
+        # Filter
+        [Parameter(Mandatory = $true)]
+        [String]
+        $Author
+    )
+    , @(Get-ScheduledTask | Where-Object { $_.Author -match $Author })
+}
+
 function Check-NotEqual {
     [CmdletBinding()]
     param (
