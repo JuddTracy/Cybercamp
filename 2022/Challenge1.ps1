@@ -95,7 +95,7 @@ function Parse-SecPol {
 
     if (-not (Test-Path variable:script:Secpol) -or $ClearCache) {
         $SecpolTempfile = New-TemporaryFile
-        Write-Host $SecpolTempfile
+        # Write-Host $SecpolTempfile
         secedit /export /cfg "$SecpolTempfile" | Out-Null
         $script:Secpol = Get-IniFile -filePath $SecpolTempfile
 
@@ -239,12 +239,6 @@ function Find-File {
         $List += $_.FullName
     }
     return ,$List
-
-    # if ($null -eq $Result) {
-    #     return ,@()
-    # } else {
-    #     @($Result.FullName)
-    # }
 }
 
 function Find-Share {
@@ -325,8 +319,7 @@ function Check-Empty {
         [String]
         $Second=''
     )
-    Write-Host $First
-    Write-Host $First.Length
+
     $First.Length -eq 0
 }
 
