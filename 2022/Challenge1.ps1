@@ -280,6 +280,7 @@ function Get-WindowsDefenderEnabled {
 
     ($null -ne $status) -and ($status.AntivirusEnabled -eq $true)
 }
+
 function Check-NotEqual {
     [CmdletBinding()]
     param (
@@ -333,11 +334,18 @@ $Challenge = Import-Csv -Path .\Challenge1.csv
 $Results = $Challenge | ForEach-Object {
     if ($_.Function) {
         $Result = $_
-        # $Result.ReturnValue = &$_.Function
-        Write-Host ("Function: {0}" -f $_.Function)
+
+        if ($Verbose -gt 0) {
+            Write-Host ("Function: {0}" -f $_.Function)
+        }
+
         $ScriptBlock = [ScriptBlock]::Create($_.Function)
         $Result.ReturnValue = &$ScriptBlock
-        Write-Host ("Result: {0}" -f $Result.ReturnValue)
+
+        if ($Verbose -gt 0) {
+            Write-Host ("Result: {0}" -f $Result.ReturnValue)
+        }
+
         if (&$_.Check $Result.ReturnValue $_.DesiredValue) {
             $Result.Score = $_.Points
         }
