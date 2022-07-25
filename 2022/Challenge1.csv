@@ -14,5 +14,5 @@ Services: Disable RIP Listener,Running,1,,Fixme,(Get-Service -Name 'VaultSvc').S
 Services: Disable Telnet,Running,1,,Fixme,(Get-Service -Name 'WpnService').Status,Check-NotEqual,
 Services: Disable WWW Publishing,Running,1,,Fixme,(Get-Service -Name 'Wsearch').Status,Check-NotEqual,
 Remote Desktop: Disable connections,1,1,,,Get-RemoteDesktopDisabled,Check-Equal,
-Windows Defender: Enable windows defender,,1,,,,,
+Windows Defender: Enable windows defender,1,1,,,Get-WindowsDefenderEnabled,Check-Equal,
 Filesystem: Remove notavirus.exe,1,1,,Do we grade them on enabling hidden folder?,Find-File -Filter 'notavirus.exe',Check-Empty,

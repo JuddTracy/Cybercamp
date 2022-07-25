@@ -275,6 +275,11 @@ function Get-RemoteDesktopDisabled {
     $reg.fDenyTSConnections -eq 1
 }
 
+function Get-WindowsDefenderEnabled {
+    $status = Get-MpComputerStatus
+
+    ($null -ne $status) -and ($status.AntivirusEnabled -eq $true)
+}
 function Check-NotEqual {
     [CmdletBinding()]
     param (
