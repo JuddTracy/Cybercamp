@@ -247,6 +247,18 @@ function Find-File {
     # }
 }
 
+function Find-Share {
+    [CmdletBinding()]
+    param (
+        # Filter
+        [Parameter(Mandatory = $true)]
+        [String]
+        $Name
+    )
+    , @(Get-SmbShare | Where-Object { $_.Name -eq $Name })
+
+}
+
 function Check-NotEqual {
     [CmdletBinding()]
     param (
