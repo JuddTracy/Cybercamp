@@ -270,6 +270,11 @@ function Find-ScheduledTasks {
     , @(Get-ScheduledTask | Where-Object { $_.Author -match $Author })
 }
 
+function Get-RemoteDesktopDisabled {
+    $reg = Get-ItemProperty -Path 'HKLM:\System\CurrentControlSet\Control\Terminal Server' -name "fDenyTSConnections"
+    $reg.fDenyTSConnections -eq 1
+}
+
 function Check-NotEqual {
     [CmdletBinding()]
     param (
