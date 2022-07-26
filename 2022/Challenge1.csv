@@ -2,7 +2,7 @@ Challenge,DesiredValue,Points,Score,Notes,Function,Check,ReturnValue
 Password Policy: Enforce password history,5,1,,,Get-PassowrdPolicyHistory,Check-Equal,
 Password Policy: Maximum age,90,1,,,Get-PasswordPolicyMaximumAge,Check-Equal,
 Password Policy: Minimum age,30,1,,,Get-PasswordPolicyMinimumAge,Check-Equal,
-Password Policy: Password length,8,1,,,Get-PasswordPolicyPasswordLength,Check-Equal,
+Password Policy: Password length,10,1,,,Get-PasswordPolicyPasswordLength,Check-Equal,
 Password Policy: Password complexity enabled,1,1,,,Get-PasswordPolicyComplexityEnabled,Check-Equal,
 Password Policy: Disable reversible encryption,0,1,,,Get-PasswordPolicyClearTextPassword,Check-Equal,
 File Sharing: Stop sharing of Cybercamp folder,1,1,,,(Find-Share -Name 'CyberCamp'),Check-Empty,
